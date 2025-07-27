@@ -1,0 +1,1 @@
+## first MAchine learning project sensoe faulty detection
