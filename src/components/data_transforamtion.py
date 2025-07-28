@@ -37,7 +37,7 @@ class DataTransforamtion:
     def getData(self,feature_store_file_path:str)->pd.DataFrame:
         try:
             df=pd.read_csv(feature_store_file_path)
-            df.rename(columns={"Good/Bad":TARGET_COLUMN})
+            df.rename(columns={"Good/Bad":TARGET_COLUMN}, inplace=True)
             return df
 
         except Exception as e:
@@ -72,12 +72,12 @@ class DataTransforamtion:
 
     def initiate_data_tranforamtion(self):
 
-        logging("initated data tranformation method in data tarnsformation class")
+        logging.info("initated data tranformation method in data tarnsformation class")
 
         try:
             df=self.getData(self.feature_store_file_path)
-            X=df.drop(columns=TARGET_COLUMN)
-            y=df.where(df[TARGET_COLUMN]==-1,0,1)#replace -1 with 0 and 1 remains same
+            X=df.drop(columns=[TARGET_COLUMN],axis=1)
+            y = np.where(df[TARGET_COLUMN] == -1, 0, df[TARGET_COLUMN])#replace -1 with 0 and 1 remains same
 
             x_tr,x_te,y_tr,y_te=train_test_split(X,y,test_size=0.2)
 
@@ -91,8 +91,8 @@ class DataTransforamtion:
             os.makedirs(os.path.dirname(preprocessor_path),exist_ok=True)#create the dir for saving the preprocessor
             self.utils.save_object(file_path=preprocessor_path,obj=preprocessor)
 
-            train_arr=np.c[x_tr_transformed,y_tr]
-            test_arr=np.c[x_te_transformed,y_te]
+            train_arr=np.c_[x_tr_transformed,y_tr]
+            test_arr=np.c_[x_te_transformed,y_te]
 
             return (train_arr,test_arr,preprocessor_path)
         except Exception as e:

@@ -28,28 +28,27 @@ class PredictionPipelineConfig:
 
 
 class PredictionPipeline:
-    def __init__(self,request:request):
+    def __init__(self,request=request):
         self.request=request
         self.prediction_pipeline_config=PredictionPipelineConfig()
         self.utils=MainUtils()
 
 
-    def save_input_files(self)->str:
+    def save_input_files(self) -> str:
         try:
-            prediction_input_dir="prediction_artifacts"
-            os.makedirs(prediction_input_dir,exist_ok=True)
+            prediction_input_dir = "prediction_artifacts"
+            os.makedirs(prediction_input_dir, exist_ok=True)
 
-            input_csv_file=self.request.files['file'] #gives object of an input csv file
-            #give a path to input file
-            pred_input_file_path=os.path.join(prediction_input_dir,input_csv_file.filename)
+            input_csv_file = self.request.files.get('file')
+            if input_csv_file is None or input_csv_file.filename == '':
+                raise CustomException("No file uploaded or filename is empty.", sys)
+
+            pred_input_file_path = os.path.join(prediction_input_dir, input_csv_file.filename)
             input_csv_file.save(pred_input_file_path)
 
-            return pred_input_file_path 
-
-
-        
+            return pred_input_file_path
         except Exception as e:
-            raise CustomException(e,sys)
+            raise CustomException(e, sys)
         
     def predict(self,features):
 
@@ -101,7 +100,7 @@ class PredictionPipeline:
             raise CustomException(e,sys)
 
 
-    def run_prediction_pipeline(self,request):
+    def run_prediction_pipeline(self):
         try:
             
             pred_input_file_path=self.save_input_files()

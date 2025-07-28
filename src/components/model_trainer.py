@@ -108,11 +108,10 @@ class ModelTrainer:
             x_te,y_te=testArr[:,:-1],testArr[:,-1]
 
             logging.info("extarcting the model config file path")
-            report_accuracy=self.evalvate_models(x_tr,x_te,y_tr,y_te,self.models)
 
 
 
-            best_model_obj,best_name=self.get_best_model(report_accuracy)
+            best_model_obj,best_name=self.get_best_model(x_tr,x_te,y_tr,y_te)
 
             fine_tune_model=self.finetune_best_model(best_model_obj,best_name,x_tr,y_tr)
 

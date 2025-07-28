@@ -36,6 +36,7 @@ class DataIngestion:
             if "_id" in df.columns.to_list():
                 df.drop(columns=["_id"],axis=1,inplace=True)
             df.replace({"na":np.nan},inplace=True)
+            df.drop(columns=["Unnamed: 0"],axis=1,inplace=True)
             return df
         except Exception as e:
             raise CustomException(e,sys)

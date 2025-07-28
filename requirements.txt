@@ -30,4 +30,4 @@ wincertstore==0.2
 xgboost==2.0.3
 
 # Editable install for your current project (assuming your project's setup.py or pyproject.toml is in the current directory)
--e .
+# -e .
