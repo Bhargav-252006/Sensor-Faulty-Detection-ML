@@ -56,7 +56,7 @@ jobs:
           docker push ${{ secrets.AWS_ECR_REPO_URI }}:$IMAGE_TAG
           
   deploy:
-    name:   Continuous-Deployment:
+    name:   Continuous-Deployment
     needs: build-and-push-ecr-image
     runs-on: self-hosted
     steps:
